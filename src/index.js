@@ -45,6 +45,7 @@ builder.defineStreamHandler(({ id }) => {
   return Promise.resolve({ streams: [{ title: "Magnet Stream", url: video.magnet }] });
 });
 
-require("http").createServer(builder.getInterface()).listen(7001, () => {
-  console.log("✅ Add-on running on http://localhost:7001");
+const port = process.env.PORT || 7001;
+require("http").createServer(builder.getInterface()).listen(port, () => {
+  console.log(`✅ Add-on running on http://localhost:${port}`);
 });
