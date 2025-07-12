@@ -8,7 +8,13 @@ const manifest = {
   logo: "https://via.placeholder.com/256?text=Anderson51",
   resources: ["catalog", "stream", "meta"],
   types: ["movie"],
-  catalogs: [{ type: "movie", id: "anderson-torrents", name: "My Videos" }]
+  catalogs: [
+    {
+      type: "movie",
+      id: "anderson-torrents",
+      name: "My Videos"
+    }
+  ]
 };
 
 const builder = new addonBuilder(manifest);
@@ -22,9 +28,16 @@ const videoList = [
   }
 ];
 
-builder.defineCatalogHandler(() =>
-  Promise.resolve({ metas: videoList.map(v => ({ id: v.id, name: v.name, type: "movie", poster: v.poster })) })
-);
+builder.defineCatalogHandler(() => {
+  return Promise.resolve({
+    metas: videoList.map(v => ({
+      id: v.id,
+      name: v.name,
+      type: "movie",
+      poster: v.poster
+    }))
+  });
+});
 
 builder.defineMetaHandler(({ id }) => {
   const video = videoList.find(v => v.id === id);
@@ -42,10 +55,18 @@ builder.defineMetaHandler(({ id }) => {
 
 builder.defineStreamHandler(({ id }) => {
   const video = videoList.find(v => v.id === id);
-  return Promise.resolve({ streams: [{ title: "Magnet Stream", url: video.magnet }] });
+  return Promise.resolve({
+    streams: [
+      {
+        title: "Magnet Stream",
+        url: video.magnet
+      }
+    ]
+  });
 });
 
-const port = process.env.PORT || 7001;
-require("http").createServer(builder.getInterface()).listen(port, () => {
-  console.log(`✅ Add-on running on http://localhost:${port}`);
+// ✅ Use dynamic port for Render hosting
+const PORT = process.env.PORT || 7001;
+require("http").createServer(builder.getInterface()).listen(PORT, () => {
+  console.log(`✅ Add-on running on http://localhost:${PORT}`);
 });
