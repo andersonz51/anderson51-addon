@@ -8,13 +8,7 @@ const manifest = {
   logo: "https://via.placeholder.com/256?text=Anderson51",
   resources: ["catalog", "stream", "meta"],
   types: ["movie"],
-  catalogs: [
-    {
-      type: "movie",
-      id: "anderson-torrents",
-      name: "My Videos"
-    }
-  ]
+  catalogs: [{ type: "movie", id: "anderson-torrents", name: "My Videos" }]
 };
 
 const builder = new addonBuilder(manifest);
@@ -24,20 +18,20 @@ const videoList = [
     id: "spiderman1",
     name: "Spider-Man: Across the Spider-Verse (2023)",
     magnet: "magnet:?xt=urn:btih:4B114777AB3B56BD0C3B8EE6301DB4AB690DADEF&dn=Spider-Man%20Across%20the%20Spider-Verse%20%282023%29%20720p.mkv&tr=udp%3a%2f%2ftracker.openbittorrent.com%3a80%2fannounce&tr=udp%3a%2f%2ftracker.opentrackr.org%3a1337%2fannounce",
-    poster: "https://drive.google.com/file/d/1qbt6rIac4FnNxm87CmpmJAr_YN1RY-4j/view?usp=sharing"
+    poster: "https://via.placeholder.com/300x450?text=SpiderMan"
   }
 ];
 
-builder.defineCatalogHandler(() => {
-  return Promise.resolve({
+builder.defineCatalogHandler(() =>
+  Promise.resolve({
     metas: videoList.map(v => ({
       id: v.id,
       name: v.name,
       type: "movie",
       poster: v.poster
     }))
-  });
-});
+  })
+);
 
 builder.defineMetaHandler(({ id }) => {
   const video = videoList.find(v => v.id === id);
@@ -56,17 +50,12 @@ builder.defineMetaHandler(({ id }) => {
 builder.defineStreamHandler(({ id }) => {
   const video = videoList.find(v => v.id === id);
   return Promise.resolve({
-    streams: [
-      {
-        title: "Magnet Stream",
-        url: video.magnet
-      }
-    ]
+    streams: [{ title: "Magnet Stream", url: video.magnet }]
   });
 });
 
-// ✅ Use dynamic port for Render hosting
-const PORT = process.env.PORT || 7001;
-require("http").createServer(builder.getInterface()).listen(PORT, () => {
-  console.log(`✅ Add-on running on http://localhost:${PORT}`);
+// ✅ Use Render's port
+const port = process.env.PORT || 10000;
+require("http").createServer(builder.getInterface()).listen(port, () => {
+  console.log(`✅ Add-on running on http://localhost:${port}`);
 });
