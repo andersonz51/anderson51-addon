@@ -54,8 +54,7 @@ builder.defineStreamHandler(({ id }) => {
   });
 });
 
-// ✅ Use Render's port
-const port = process.env.PORT || 10000;
-require("http").createServer(builder.getInterface()).listen(port, () => {
-  console.log(`✅ Add-on running on http://localhost:${port}`);
+const PORT = process.env.PORT || 10000;
+require("http").createServer(builder.getInterface()).listen(PORT, () => {
+  console.log(`✅ Add-on running at http://localhost:${PORT}`);
 });
